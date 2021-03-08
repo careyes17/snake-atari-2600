@@ -86,7 +86,7 @@ This is so time critical in fact, that one misplaced "do nothing" command can co
 
 The algorithm associated with placing the apple at a random location in the playfield consumes a total of around 2000 cycles in a worse case scenario.
 
-The Atari 2600 uses syncing signals to communicate when to draw to the screen. In ["Racing the Beam"](#"racing-the-beam"), I explained that we have a 72 clock cycle period of time where the screen is being drawn to. After all of the scanlines the user sees are completed processing, the system enters blanking periods, giving us some much-needed breathing room in terms of CPU clock cycles available to perform game logic.
+The Atari 2600 uses syncing signals to communicate when to draw to the screen. In [Racing the Beam](#racing-the-beam), I explained that we have a 72 clock cycle period of time where the screen is being drawn to. After all of the scanlines the user sees are completed processing, the system enters blanking periods, giving us some much-needed breathing room in terms of CPU clock cycles available to perform game logic.
 
 In the vertical blanking period, we have 2812 clock cycles to play with. The overscan period also grants us 2280 more clock cycles.
 
