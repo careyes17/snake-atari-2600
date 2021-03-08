@@ -43,7 +43,7 @@ To start/restart the game, you can pull the `reset` lever on the console.
 ### Play Game on an Emulator or Console
 
 1. Download the `snake.bin` file from the top level directory.
-2. Use this binary file in your emulator of choice or burn it/put it on a cartride and use it on an Atari 2600.
+2. Use this binary file in your emulator of choice or burn it/put it on a cartridge and use it on an Atari 2600.
 
 ### Compile and Use Binaries
 
@@ -62,7 +62,7 @@ To start/restart the game, you can pull the `reset` lever on the console.
 ### Racing the Beam
 Writing anything in assembly language can be a challenge, however it allows you to leverage every cycle your CPU has to offer in order to perform a task. Developing for the Atari 2600 heavily depends on cycle counting.
 
-The Atari 2600 does *not* have VRAM (Video Ram), and instead elects to use a chip called the TIA (Television Interface Adapter) which drives all of the video processing of the console. Becuase RAM was incredibly expensive in 1977, using the TIA surely saved Atari a lot of money in manufacturing which contributed to the console selling millions of units. But this came at a huge hit to the DX (Developer Experience).
+The Atari 2600 does *not* have VRAM (Video Ram), and instead elects to use a chip called the TIA (Television Interface Adapter) which drives all of the video processing of the console. Because RAM was incredibly expensive in 1977, using the TIA surely saved Atari a lot of money in manufacturing which contributed to the console selling millions of units. But this came at a huge hit to the DX (Developer Experience).
 
 The TIA chip is used directly by the CPU to generate graphics on the TV "*on the fly*". This means that the CPU must communicate in a very small (72 cycle) time window with the TIA chip on any given scanline to generate compelling graphics.
 
@@ -76,29 +76,29 @@ If you go beyond the 72 clock cycle limit, your image starts distorting and prod
 
 For this snake implementation, I used the playfield in order to display the snake game. The Atari 2600, for reasons I won't go into here, offers a playfield that encompasses the "left half" of the screen which can be turned on and off via bit manipulation. This playfield can be mirrored in order to save clock cycles, making a symmetrical playfield.
 
-This symmetrical playfield optimization was not an option for this game. The snake must be able to  exist on both the left and right sides of the screen, where its body can be in an assymetrical state. This means that the playfield MUST be changed on the fly, mid electron beam, in order to change the playfield once it gets to the right side of the screen.
+This symmetrical playfield optimization was not an option for this game. The snake must be able to  exist on both the left and right sides of the screen, where its body can be in an asymmetrical state. This means that the playfield MUST be changed on the fly, mid electron beam, in order to change the playfield once it gets to the right side of the screen.
 
 The main drawing routine that fits into the 72 clock cycles in this snake implementation is full of playfield bit manipulation and logical operations in order to accurately display the state of the snake and its body.
 
-This is so time critical in fact, that one missplaced "do nothing" command can completely break the game graphics.
+This is so time critical in fact, that one misplaced "do nothing" command can completely break the game graphics.
 
 ### Placing the Apple in the Playfield
 
 The algorithm associated with placing the apple at a random location in the playfield consumes a total of around 2000 cycles in a worse case scenario.
 
-The Atari 2600 uses syncing signals to communicate when to draw to the screen. In ["Racing the Beam"](#"racing-the-beam"), I explained that we have a 72 clock cycle period of time where the screen is being drawn to. After all of the scanlines the user sees are completed processing, the system enters blanking periods, giving us some much needed breathing room in terms of CPU clock cycles available to perform game logic.
+The Atari 2600 uses syncing signals to communicate when to draw to the screen. In ["Racing the Beam"](#"racing-the-beam"), I explained that we have a 72 clock cycle period of time where the screen is being drawn to. After all of the scanlines the user sees are completed processing, the system enters blanking periods, giving us some much-needed breathing room in terms of CPU clock cycles available to perform game logic.
 
 In the vertical blanking period, we have 2812 clock cycles to play with. The overscan period also grants us 2280 more clock cycles.
 
 After having optimized/worked with the TIA to produce video output in a 72 clock cycle window, having 5092 clock cycles for processing game logic feels extremely liberating.
 
-However this may be deceivingly abundant. There are several big O(1) (constant time) subroutines that we need to hit every frame, which eat up some cycles, but what really consumes the majority of our processing brandwith are looping operations.
+However this may be deceivingly abundant. There are several big O(1) (constant time) subroutines that we need to hit every frame, which eat up some cycles, but what really consumes the majority of our processing bandwidth are looping operations.
 
 Because we have a limited cycle count that we must not go over, some of the algorithms used were not very DRY (Don't Repeat Yourself). But there was a good reason for this.
 
-If you use "fancier" quality of life intructions or instructions that help with code maintainability, there are often very severe cycle count penalties. So having these more costly operations occur in every loop eats into our cycle count *fast*.
+If you use "fancier" quality of life instructions or instructions that help with code maintainability, there are often very severe cycle count penalties. So having these more costly operations occur in every loop eats into our cycle count *fast*.
 
-Even having simple comparison logic, bit shifting operations, and loading variables/table values for DRYness significatly increases the cycle count of loops in many situations. This makes it unfeasible to implement certain algorithms in the way I would have preferred.
+Even having simple comparison logic, bit shifting operations, and loading variables/table values for DRYness significantly increases the cycle count of loops in many situations. This makes it unfeasible to implement certain algorithms in the way I would have preferred.
 
 As a result, the apple placement algorithm does have some unfortunately unsightly but "quick" optimizations that reduce its DRYness.
 
@@ -126,4 +126,4 @@ For example, the playfield size I ended up using for this snake implementation i
 
 With 48 bytes of RAM left at my disposal, this gave me a "comfortable" amount of room to define some quality of life variables. This also had the added benefit of simplifying the playfield rendering process to some degree.
 
-Now, in order to use less RAM for storing the "head history" (meaning you could siginificanly increase the size of the playfield), you would have to use a more creative solution that I chose not to explore with this project.
+Now, in order to use less RAM for storing the "head history" (meaning you could significantly increase the size of the playfield), you would have to use a more creative solution that I chose not to explore with this project.
