@@ -28,7 +28,7 @@ This is my first Assembly Language project, not to mention my first Atari 2600 g
 If you're interested in looking further into 6502 Assmebly Langauge or Atari 2600 development, I have a [repository](https://github.com/careyes17/6502-practice) that contains several useful resources.
 
 ## Play Online
-Try out Snake in your browser at [Javatari](https://javatari.org/?ROM=https://https://github.com/careyes17/6502-practice/blob/main/snake.bin?raw=true)
+Try out Snake in your browser at [Javatari](https://javatari.org/?ROM=https://github.com/careyes17/snake-atari-2600/raw/master/snake.bin)
 
 ## Instructions
 
